@@ -137,7 +137,3 @@ El sistema implementa selección inteligente:
 - El sistema detecta automáticamente si ya existe una sesión activa
 - Las postulaciones duplicadas (HTTP 409) se consideran comportamiento esperado
 - Los reportes se guardan directamente en la carpeta `reports/`
-
----
-
-_Sistema de Pruebas Automatizadas - Universidad Nacional de Colombia_
