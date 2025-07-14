@@ -2,10 +2,6 @@
 
 Este módulo contiene las pruebas automatizadas para el sistema de autenticación de PetMatch, incluyendo login y registro de usuarios y clínicas veterinarias.
 
-## 🏛️ Universidad Nacional de Colombia
-
-**Facultad de Ingeniería - Departamento de Sistemas**
-
 ## 📋 Descripción
 
 Las pruebas de autenticación verifican:
