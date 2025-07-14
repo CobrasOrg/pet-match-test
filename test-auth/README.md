@@ -112,11 +112,3 @@ test-auth/
 3. **Validación:** Asegurar que las validaciones de formulario funcionan
 4. **Integración:** Verificar la correcta integración frontend-backend
 5. **Documentación:** Generar evidencia formal de las pruebas ejecutadas
-
-## 📞 Soporte
-
-Para más información sobre estas pruebas, consultar la documentación del proyecto PetMatch o contactar al equipo de desarrollo.
-
----
-
-_Sistema de Pruebas Automatizadas - Universidad Nacional de Colombia_

@@ -18,6 +18,18 @@ pet-match-test/
 │   ├── requirements.txt    # Dependencias específicas
 │   ├── README.md          # Documentación específica
 │   └── reports/           # Reportes PDF generados
+├── test-requests/          # 📋 Pruebas de Solicitudes de Donación
+│   ├── test_requests.py    # Script principal de pruebas
+│   ├── pdf_generator.py    # Generador de reportes PDF
+│   ├── requirements.txt    # Dependencias específicas
+│   ├── README.md          # Documentación específica
+│   └── reports/           # Reportes PDF generados
+├── test-pet/               # 🐾 Pruebas de Registro de Mascotas
+│   ├── test_pet.py         # Script principal de pruebas
+│   ├── pdf_generator.py    # Generador de reportes PDF
+│   ├── requirements.txt    # Dependencias específicas
+│   ├── README.md          # Documentación específica
+│   └── reports/           # Reportes PDF generados
 ├── assets/                 # Recursos compartidos
 │   └── university_logo.png # Logo de la Universidad Nacional
 ├── geckodriver.exe        # Driver para Firefox
@@ -45,11 +57,19 @@ pip install -r requirements.txt
 # Para pruebas de donación
 cd test-donations
 pip install -r requirements.txt
+
+# Para pruebas de solicitudes
+cd test-requests
+pip install -r requirements.txt
+
+# Para pruebas de mascotas
+cd test-pet
+pip install -r requirements.txt
 ```
 
 ## 📊 Reportes PDF
 
-Ambos módulos generan automáticamente reportes PDF profesionales que incluyen:
+Todos los módulos generan automáticamente reportes PDF profesionales que incluyen:
 
 - 🏛️ **Logo de la Universidad Nacional de Colombia**
 - 📊 **Gráficos de torta y barras** con resultados y tiempos
@@ -61,6 +81,8 @@ Ambos módulos generan automáticamente reportes PDF profesionales que incluyen:
 
 - **Autenticación**: `test-auth/reports/reporte_resumen_autenticacion_*.pdf`
 - **Donación**: `test-donations/reports/reporte_resumen_donaciones_*.pdf`
+- **Solicitudes**: `test-requests/reports/reporte_resumen_solicitudes_*.pdf`
+- **Mascotas**: `test-pet/reports/reporte_resumen_mascotas_*.pdf`
 
 ## 🚀 Módulos de Pruebas Disponibles
 
@@ -88,6 +110,28 @@ Ambos módulos generan automáticamente reportes PDF profesionales que incluyen:
   - ✅ Manejo de modales y navegación automática
   - ✅ Selección aleatoria para mayor cobertura
 
+### 📋 Test-Requests: Pruebas de Solicitudes de Donación
+
+- **Ubicación**: `test-requests/`
+- **Funcionalidad**: Gestión de solicitudes de donación de sangre
+- **Ejecución**: `cd test-requests && python test_requests.py`
+- **Características**:
+  - ✅ Creación de nuevas solicitudes de donación
+  - ✅ Validación de formularios de solicitud
+  - ✅ Gestión de datos médicos y urgencia
+  - ✅ Flujo completo desde login hasta confirmación
+
+### 🐾 Test-Pet: Pruebas de Registro de Mascotas
+
+- **Ubicación**: `test-pet/`
+- **Funcionalidad**: Sistema completo de registro de mascotas
+- **Ejecución**: `cd test-pet && python test_pet.py`
+- **Características**:
+  - ✅ Registro completo de nueva mascota
+  - ✅ Validación de información básica y médica
+  - ✅ Manejo de formularios complejos
+  - ✅ Flujo end-to-end desde autenticación hasta confirmación
+
 ## 📊 Características de las Pruebas
 
 ✅ **Reportes PDF Profesionales** con logo universitario y gráficos  
@@ -114,6 +158,16 @@ Ambos módulos generan automáticamente reportes PDF profesionales que incluyen:
 - Primera Solicitud: ~35 segundos
 - Solicitud Aleatoria: ~17 segundos
 - **Total**: ~52 segundos
+
+### Test-Requests (1 prueba):
+
+- Creación de Solicitud: ~45-60 segundos
+- **Total**: ~45-60 segundos
+
+### Test-Pet (1 prueba):
+
+- Registro de Mascota: ~45-60 segundos
+- **Total**: ~45-60 segundos
 
 ## Instalación de GeckoDriver (Firefox)
 
@@ -171,6 +225,24 @@ Alternativamente, puedes agregar la carpeta donde está geckodriver a tu PATH de
 - **Características**: Mayor variabilidad en pruebas
 - **Objetivo**: Verificar robustez con diferentes solicitudes
 
+### 📋 Test-Requests: Sistema de Solicitudes
+
+#### Prueba: Creación de Solicitud de Donación
+
+- **Credenciales**: veterinaria@sanpatricio.com / Clinic123
+- **Flujo**: Login → Navegación a "Mis Solicitudes" → Crear Nueva Solicitud → Completar Formulario
+- **Datos de prueba**: Mascota de emergencia, tipo de sangre DEA 1.1+, urgencia alta
+- **Objetivo**: Verificar el proceso completo de creación de solicitudes por parte de clínicas
+
+### 🐾 Test-Pet: Sistema de Registro de Mascotas
+
+#### Prueba: Registro Completo de Mascota
+
+- **Credenciales**: juan@example.com / Password123
+- **Flujo**: Login → Navegación a "Mis Mascotas" → Registrar Nueva Mascota → Completar Formulario
+- **Datos de prueba**: TestPet, Perro, Mestizo, 3 años, 30kg, DEA 1.1+
+- **Objetivo**: Verificar el flujo end-to-end de registro de mascotas para dueños
+
 ## 🔧 Características Técnicas
 
 - **Selenium WebDriver 4.x**: Automatización web robusta
@@ -186,7 +258,7 @@ Alternativamente, puedes agregar la carpeta donde está geckodriver a tu PATH de
 
 ## 🚨 Notas Importantes
 
-### Para ambos módulos:
+### Para todos los módulos:
 
 1. **Servidor frontend**: Debe ejecutarse en `http://localhost:5173`
 2. **Firefox**: Instalación requerida en el sistema
@@ -205,6 +277,18 @@ Alternativamente, puedes agregar la carpeta donde está geckodriver a tu PATH de
 - **Navegador independiente**: Cada prueba abre/cierra su navegador
 - **Datos de prueba**: No se guardan permanentemente
 - **Formularios**: Validación completa de campos
+
+### Específico para Test-Requests:
+
+- **Login como clínica**: Requiere credenciales de veterinaria
+- **Formulario complejo**: Múltiples campos médicos y de urgencia
+- **Navegación específica**: Acceso a "Mis Solicitudes"
+
+### Específico para Test-Pet:
+
+- **Login como dueño**: Requiere credenciales de usuario dueño
+- **Formulario extenso**: Información básica y médica completa
+- **Validaciones estrictas**: Todos los campos obligatorios requeridos
 
 ## 🛠️ Solución de Problemas
 
