@@ -47,7 +47,7 @@ class PetMatchRequestsTester:
             self.driver.maximize_window()
             self.wait = WebDriverWait(self.driver, 10)
             print("Firefox iniciado correctamente")
-            time.sleep(2)
+            time.sleep(3.5)
             return True
             
         except Exception as e:
@@ -70,18 +70,18 @@ class PetMatchRequestsTester:
             
             # Ir directamente a la página de login
             self.driver.get(f"{self.base_url}/login")
-            time.sleep(1)  # Reducido de 1.5s a 1s
+            time.sleep(2.5)  # Reducido de 1.5s a 1s
             
             # Llenar el formulario de login
             email_input = self.wait.until(EC.presence_of_element_located((By.NAME, "email")))
             password_input = self.driver.find_element(By.NAME, "password")
             
             email_input.clear()
-            email_input.send_keys("veterinaria@sanpatricio.com")
+            email_input.send_keys("castiblancoavendaom@gmail.com")
             password_input.clear()
-            password_input.send_keys("Clinic123")
+            password_input.send_keys("Aa3142501360")
             
-            time.sleep(0.3)  # Reducido de 0.5s a 0.3s
+            time.sleep(1.8)  # Reducido de 0.5s a 0.3s
             
             # Hacer click en el botón de submit
             submit_button = self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
@@ -93,16 +93,16 @@ class PetMatchRequestsTester:
                 alert_text = alert.text
                 print(f"🔔 Alert detectado: {alert_text}")
                 alert.accept()
-                time.sleep(0.5)  # Reducido de 1s a 0.5s
+                time.sleep(2.0)  # Reducido de 1s a 0.5s
             except TimeoutException:
                 pass
             
-            time.sleep(1.5)  # Mantener tiempo para verificación
+            time.sleep(3.0)  # Mantener tiempo para verificación
             
             # Verificar login exitoso buscando indicadores
             success_indicators = [
-                "veterinaria@sanpatricio.com",
-                "San Patricio",
+                "castiblancoavendaom@gmail.com",
+                "Clinica Castiblanco's",
                 "Mi Perfil",
                 "Cerrar sesión",
                 "solicitudes"
@@ -130,7 +130,7 @@ class PetMatchRequestsTester:
             
             # Intentar navegar directamente a /requests
             self.driver.get(f"{self.base_url}/requests")
-            time.sleep(1)  # Reducido de 2s a 1s
+            time.sleep(2.5)  # Reducido de 2s a 1s
             
             # Verificar que estamos en la página de solicitudes
             page_indicators = [
@@ -182,7 +182,7 @@ class PetMatchRequestsTester:
             if active_tab:
                 # Click directo sin scroll innecesario (las pestañas suelen estar visibles)
                 active_tab.click()
-                time.sleep(0.5)  # Reducido de 2s a 0.5s
+                time.sleep(2.0)  # Reducido de 2s a 0.5s
                 print("✅ Click exitoso en solicitudes activas")
                 return True
             else:
@@ -220,12 +220,12 @@ class PetMatchRequestsTester:
             if manage_button:
                 # Hacer scroll más agresivo para evitar obstrucciones
                 self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", manage_button)
-                time.sleep(1)
+                time.sleep(2.5)
                 
                 # Intentar click normal primero
                 try:
                     manage_button.click()
-                    time.sleep(3)
+                    time.sleep(4.5)
                     print("✅ Click exitoso en botón 'Gestionar'")
                     return True
                 except Exception as click_error:
@@ -235,7 +235,7 @@ class PetMatchRequestsTester:
                     # Si falla el click normal, usar JavaScript
                     try:
                         self.driver.execute_script("arguments[0].click();", manage_button)
-                        time.sleep(3)
+                        time.sleep(4.5)
                         print("✅ Click con JavaScript exitoso en botón 'Gestionar'")
                         return True
                     except Exception as js_error:
@@ -279,12 +279,12 @@ class PetMatchRequestsTester:
             if view_button:
                 # Hacer scroll más seguro
                 self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", view_button)
-                time.sleep(1)
+                time.sleep(2.5)
                 
                 # Intentar click normal primero
                 try:
                     view_button.click()
-                    time.sleep(3)
+                    time.sleep(4.5)
                     print("✅ Click exitoso en 'Ver mascotas postuladas'")
                     return True
                 except Exception as click_error:
@@ -294,7 +294,7 @@ class PetMatchRequestsTester:
                     # Si falla el click normal, usar JavaScript
                     try:
                         self.driver.execute_script("arguments[0].click();", view_button)
-                        time.sleep(3)
+                        time.sleep(4.5)
                         print("✅ Click con JavaScript exitoso en 'Ver mascotas postuladas'")
                         return True
                     except Exception as js_error:
@@ -402,9 +402,9 @@ class PetMatchRequestsTester:
             if approve_button:
                 # Hacer scroll al elemento si es necesario
                 self.driver.execute_script("arguments[0].scrollIntoView(true);", approve_button)
-                time.sleep(1)
+                time.sleep(2.5)
                 approve_button.click()
-                time.sleep(2)
+                time.sleep(3.5)
                 print("✅ Click exitoso en botón 'Aprobar'")
                 return True
             else:
@@ -442,7 +442,7 @@ class PetMatchRequestsTester:
             
             if pending_tab:
                 pending_tab.click()
-                time.sleep(1)
+                time.sleep(2.5)
                 print("✅ Click exitoso en solicitudes en revisión")
                 return True
             else:
@@ -474,11 +474,11 @@ class PetMatchRequestsTester:
                 
                 # Hacer scroll y click
                 self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", selected_button)
-                time.sleep(1)
+                time.sleep(2.5)
                 
                 try:
                     selected_button.click()
-                    time.sleep(3)
+                    time.sleep(4.5)
                     print("✅ Click exitoso en solicitud seleccionada")
                     return True
                 except Exception as click_error:
@@ -487,7 +487,7 @@ class PetMatchRequestsTester:
                     
                     try:
                         self.driver.execute_script("arguments[0].click();", selected_button)
-                        time.sleep(3)
+                        time.sleep(4.5)
                         print("✅ Click con JavaScript exitoso")
                         return True
                     except Exception as js_error:
@@ -523,7 +523,7 @@ class PetMatchRequestsTester:
             
             if edit_button:
                 edit_button.click()
-                time.sleep(2)
+                time.sleep(3.5)
                 print("✅ Click exitoso en botón Editar")
                 return True
             else:
@@ -549,19 +549,19 @@ class PetMatchRequestsTester:
             blood_options = self.driver.find_elements(By.XPATH, "//div[@role='option'] | //div[contains(@class, 'SelectItem')]")
             if blood_options:
                 blood_options[0].click()
-                time.sleep(1)
+                time.sleep(2.5)
                 print("✅ Tipo de sangre modificado")
             
             # Modificar urgencia
             print("⚠️ Cambiando urgencia...")
             urgency_trigger = self.driver.find_element(By.XPATH, "//label[contains(text(), 'Urgencia')]/following-sibling::button | //label[contains(text(), 'Urgencia')]/following-sibling::div//button")
             urgency_trigger.click()
-            time.sleep(1)
+            time.sleep(2.5)
             
             urgency_options = self.driver.find_elements(By.XPATH, "//div[@role='option'] | //div[contains(@class, 'SelectItem')]")
             if urgency_options:
                 urgency_options[0].click()
-                time.sleep(1)
+                time.sleep(2.5)
                 print("✅ Urgencia modificada")
             
             # Modificar peso mínimo
@@ -569,7 +569,7 @@ class PetMatchRequestsTester:
             weight_input = self.driver.find_element(By.XPATH, "//label[contains(text(), 'Peso mínimo')]/following-sibling::input | //input[@type='number']")
             weight_input.clear()
             weight_input.send_keys("30")
-            time.sleep(1)
+            time.sleep(2.5)
             print("✅ Peso mínimo modificado")
             
             # Modificar descripción
@@ -577,7 +577,7 @@ class PetMatchRequestsTester:
             description_textarea = self.driver.find_element(By.XPATH, "//label[contains(text(), 'Descripción')]/following-sibling::textarea | //textarea")
             description_textarea.clear()
             description_textarea.send_keys("Descripción actualizada por prueba automatizada. La mascota necesita donación urgente.")
-            time.sleep(1)
+            time.sleep(2.5)
             print("✅ Descripción modificada")
             
             return True
@@ -608,7 +608,7 @@ class PetMatchRequestsTester:
             
             if save_button:
                 save_button.click()
-                time.sleep(3)
+                time.sleep(4.5)
                 print("✅ Click exitoso en botón Guardar")
                 
                 # Verificar mensaje de éxito
@@ -646,7 +646,7 @@ class PetMatchRequestsTester:
             self.test_results['login'] = {
                 'success': login_success,
                 'timestamp': datetime.now(),
-                'details': 'Login como veterinaria@sanpatricio.com'
+                'details': 'Login como castiblancoavendaom@gmail.com'
             }
             
             if not login_success:
@@ -748,7 +748,7 @@ class PetMatchRequestsTester:
             self.test_results['edit_login'] = {
                 'success': login_success,
                 'timestamp': datetime.now(),
-                'details': 'Login como veterinaria@sanpatricio.com para edición'
+                'details': 'Login como castiblancoavendaom@gmail.com para edición'
             }
             
             if not login_success:
@@ -876,7 +876,7 @@ class PetMatchRequestsTester:
             
             if review_tab:
                 review_tab.click()
-                time.sleep(1)
+                time.sleep(2.5)
                 print("✅ Click exitoso en solicitudes en revisión")
                 return True
             else:
@@ -916,12 +916,12 @@ class PetMatchRequestsTester:
                 
                 # Hacer scroll al elemento
                 self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", selected_button)
-                time.sleep(1)
+                time.sleep(2.5)
                 
                 # Intentar click normal primero
                 try:
                     selected_button.click()
-                    time.sleep(3)
+                    time.sleep(4.5)
                     print("✅ Click exitoso en botón 'Gestionar' seleccionado")
                     return True
                 except Exception as click_error:
@@ -931,7 +931,7 @@ class PetMatchRequestsTester:
                     # Si falla el click normal, usar JavaScript
                     try:
                         self.driver.execute_script("arguments[0].click();", selected_button)
-                        time.sleep(3)
+                        time.sleep(4.5)
                         print("✅ Click con JavaScript exitoso en botón 'Gestionar'")
                         return True
                     except Exception as js_error:
@@ -970,10 +970,10 @@ class PetMatchRequestsTester:
             if edit_button:
                 # Hacer scroll al elemento
                 self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", edit_button)
-                time.sleep(1)
+                time.sleep(2.5)
                 
                 edit_button.click()
-                time.sleep(2)
+                time.sleep(3.5)
                 print("✅ Click exitoso en botón 'Editar'")
                 return True
             else:
@@ -1013,7 +1013,7 @@ class PetMatchRequestsTester:
                 else:
                     # Si es un select personalizado (Shadcn/ui)
                     urgency_select.click()
-                    time.sleep(1)
+                    time.sleep(2.5)
                     
                     # Buscar opciones disponibles
                     urgency_option_selectors = [
@@ -1034,7 +1034,7 @@ class PetMatchRequestsTester:
                         selected_option, selector_used = random.choice(available_options)
                         selected_option.click()
                         print(f"✅ Urgencia cambiada usando: {selector_used}")
-                        time.sleep(1)
+                        time.sleep(2.5)
                 
             except Exception as e:
                 print(f"⚠️ No se pudo cambiar urgencia: {e}")
@@ -1045,7 +1045,7 @@ class PetMatchRequestsTester:
                 blood_type_select = self.driver.find_element(By.XPATH, "//label[contains(text(), 'Tipo de sangre')]/following-sibling::*//button[@role='combobox'] | //label[contains(text(), 'Tipo de sangre')]/following-sibling::select")
                 
                 blood_type_select.click()
-                time.sleep(1)
+                time.sleep(2.5)
                 
                 # Buscar todas las opciones de tipo de sangre disponibles
                 blood_type_options = self.driver.find_elements(By.XPATH, "//div[@role='option']")
@@ -1057,7 +1057,7 @@ class PetMatchRequestsTester:
                         selected_blood_type = random.choice(valid_options)
                         selected_blood_type.click()
                         print(f"✅ Tipo de sangre cambiado a: {selected_blood_type.text}")
-                        time.sleep(1)
+                        time.sleep(2.5)
                 
             except Exception as e:
                 print(f"⚠️ No se pudo cambiar tipo de sangre: {e}")
@@ -1074,7 +1074,7 @@ class PetMatchRequestsTester:
                 weight_input.clear()
                 weight_input.send_keys(str(rounded_weight))
                 print(f"✅ Peso mínimo cambiado a: {rounded_weight} kg")
-                time.sleep(1)
+                time.sleep(2.5)
                 
             except Exception as e:
                 print(f"⚠️ No se pudo cambiar peso mínimo: {e}")
@@ -1097,7 +1097,7 @@ class PetMatchRequestsTester:
                 description_textarea.clear()
                 description_textarea.send_keys(new_description)
                 print(f"✅ Descripción cambiada a: {new_description[:50]}...")
-                time.sleep(1)
+                time.sleep(2.5)
                 
             except Exception as e:
                 print(f"⚠️ No se pudo cambiar descripción: {e}")
@@ -1134,10 +1134,10 @@ class PetMatchRequestsTester:
             if save_button:
                 # Hacer scroll al elemento
                 self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", save_button)
-                time.sleep(1)
+                time.sleep(2.5)
                 
                 save_button.click()
-                time.sleep(3)  # Tiempo para que procese la actualización
+                time.sleep(4.5)  # Tiempo para que procese la actualización
                 print("✅ Click exitoso en botón 'Guardar'")
                 
                 # Verificar mensaje de éxito
@@ -1179,7 +1179,7 @@ class PetMatchRequestsTester:
             
             # Verificar si ya estamos logueados - si ya estamos en /requests, saltamos login
             current_url = self.driver.current_url
-            already_logged_in = "/requests" in current_url or "veterinaria@sanpatricio.com" in self.driver.page_source
+            already_logged_in = "/requests" in current_url or "castiblancoavendaom@gmail.com" in self.driver.page_source
             
             if not already_logged_in:
                 # Paso 1: Login como veterinaria (solo si no estamos logueados)
@@ -1187,7 +1187,7 @@ class PetMatchRequestsTester:
                 self.test_results['edit_login'] = {
                     'success': login_success,
                     'timestamp': datetime.now(),
-                    'details': 'Login como veterinaria@sanpatricio.com para edición'
+                    'details': 'Login como castiblancoavendaom@gmail.com para edición'
                 }
                 
                 if not login_success:
@@ -1305,7 +1305,7 @@ def main():
             print("❌ Flujo 1 falló")
         
         # Pequeña pausa entre flujos
-        time.sleep(3)
+        time.sleep(4.5)
         
         # Ejecutar flujo 2: Edición de solicitudes en revisión
         print("\n✏️ FLUJO 2: EDICIÓN DE SOLICITUDES EN REVISIÓN")

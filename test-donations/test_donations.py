@@ -47,7 +47,7 @@ class PetMatchDonationTester:
             self.driver.maximize_window()
             self.wait = WebDriverWait(self.driver, 10)
             print("Firefox iniciado correctamente")
-            time.sleep(2)
+            time.sleep(3)
             return True
         except WebDriverException as e:
             print(f"❌ Error al inicializar Firefox: {e}")
@@ -79,16 +79,16 @@ class PetMatchDonationTester:
             if profile_button:
                 print("🔓 Cerrando sesión...")
                 profile_button.click()
-                time.sleep(0.5)
+                time.sleep(3)
                 
                 # Buscar y hacer click en "Cerrar sesión" 
                 logout_buttons = self.driver.find_elements(By.XPATH, "//button[contains(text(), 'Cerrar sesión')]")
                 if logout_buttons:
                     # Hacer scroll al elemento si es necesario
                     self.driver.execute_script("arguments[0].scrollIntoView(true);", logout_buttons[0])
-                    time.sleep(0.3)
+                    time.sleep(3)
                     logout_buttons[0].click()
-                    time.sleep(0.5)
+                    time.sleep(3)
                     print("✅ Sesión cerrada")
                 else:
                     print("❌ No se encontró botón de logout")
@@ -105,7 +105,7 @@ class PetMatchDonationTester:
             print("🔍 Navegando a solicitudes públicas...")
             # Corregir la URL - según el NavBar.jsx, la ruta es /public
             self.driver.get(f"{self.base_url}/public")
-            time.sleep(1.5)  # Reducido de 3s a 1.5s
+            time.sleep(3)
             
             # Verificar que la página cargó correctamente
             if "Ayuda a salvar vidas peludas" in self.driver.page_source:
@@ -125,7 +125,7 @@ class PetMatchDonationTester:
         """Busca y encuentra una solicitud de donación disponible por índice - versión optimizada"""
         try:
             print(f"🔍 Buscando solicitud de donación #{request_index + 1}...")
-            time.sleep(1)  # Reducido de 1.5s a 1s
+            time.sleep(3)  # Aumentado a 3 segundos
             
             # Buscar por el selector correcto de artículos basado en el JSX
             request_cards = self.driver.find_elements(By.CSS_SELECTOR, "article")
@@ -192,7 +192,7 @@ class PetMatchDonationTester:
             
             # Ir a la página de login
             self.driver.get(f"{self.base_url}/login")
-            time.sleep(1)  # Reducido de 1.5s a 1s
+            time.sleep(3) 
             
             # Llenar formulario de login
             email_input = self.wait.until(EC.presence_of_element_located((By.NAME, "email")))
@@ -200,11 +200,11 @@ class PetMatchDonationTester:
             
             # Usar credenciales actualizadas
             email_input.clear()
-            email_input.send_keys("juan@example.com")
+            email_input.send_keys("mcastiblancoa@unal.edu.co")
             password_input.clear()
-            password_input.send_keys("Password123")
+            password_input.send_keys("Mati112999")
             
-            time.sleep(0.5)  # Reducido de 1s a 0.5s
+            time.sleep(3)
             
             # Hacer click en submit
             submit_button = self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
@@ -216,17 +216,17 @@ class PetMatchDonationTester:
                 alert_text = alert.text
                 print(f"🔔 Alert detectado: {alert_text}")
                 alert.accept()  # Aceptar el alert
-                time.sleep(1)
+                time.sleep(3)
             except TimeoutException:
                 # No hay alert, continuar normalmente
                 pass
             
-            time.sleep(1.5)  # Reducido de 2.5s a 1.5s
+            time.sleep(3)  # Aumentado a 3 segundos
             
             # Verificar login exitoso buscando indicadores
             success_indicators = [
-                "juan@example.com",
-                "Juan",
+                "mcastiblancoa@unal.edu.co",
+                "Manuel",
                 "Mi Perfil",
                 "Cerrar sesión"
             ]
@@ -287,7 +287,7 @@ class PetMatchDonationTester:
             # Click directo más rápido
             print(f"🎯 Haciendo click en: {button_found.text}")
             self.driver.execute_script("arguments[0].click();", button_found)
-            time.sleep(1)  # Tiempo mínimo para que aparezca el modal
+            time.sleep(3)  # Aumentado a 3 segundos para que aparezca el modal
             print("✅ Click en botón de donación exitoso")
             
             return True
@@ -357,7 +357,7 @@ class PetMatchDonationTester:
                 
                 # Click directo sin tanto scroll
                 self.driver.execute_script("arguments[0].click();", select_button)
-                time.sleep(1.2)  # Tiempo mínimo para procesar
+                time.sleep(3)  # Aumentado a 3 segundos para procesar
                 
                 # Verificar resultado más rápido
                 success_messages = self.driver.find_elements(By.XPATH, "//*[contains(text(), 'Perfecto') or contains(text(), 'postulado') or contains(text(), 'éxito')]")
@@ -385,7 +385,7 @@ class PetMatchDonationTester:
         """Verifica que la postulación fue exitosa"""
         try:
             print("✅ Verificando confirmación de postulación...")
-            time.sleep(1)  # Reducido de 2s a 1s
+            time.sleep(3)
             
             # Buscar mensajes de éxito
             success_indicators = [
@@ -463,7 +463,7 @@ class PetMatchDonationTester:
             # Paso 1: Login (solo si no estamos logueados)
             print("Paso 1: Verificando autenticación...")
             page_content = self.driver.page_source
-            is_logged_in = any(indicator in page_content for indicator in ["juan@example.com", "Juan", "Mi Perfil", "Cerrar sesión"])
+            is_logged_in = any(indicator in page_content for indicator in ["mcastiblancoa@unal.edu.co", "Manuel", "Mi Perfil", "Cerrar sesión"])
             
             if not is_logged_in:
                 print("🔑 Iniciando sesión...")

@@ -96,6 +96,7 @@ Todos los módulos generan automáticamente reportes PDF profesionales que inclu
   - ✅ Login de clínicas veterinarias
   - ✅ Registro de nuevos usuarios
   - ✅ Registro de nuevas clínicas
+  - ✅ Eliminación de cuentas creadas
   - ✅ Validación de formatos y navegación
 
 ### 🩸 Test-Donations: Pruebas de Donación
@@ -124,10 +125,11 @@ Todos los módulos generan automáticamente reportes PDF profesionales que inclu
 ### 🐾 Test-Pet: Pruebas de Registro de Mascotas
 
 - **Ubicación**: `test-pet/`
-- **Funcionalidad**: Sistema completo de registro de mascotas
+- **Funcionalidad**: Sistema completo de registro y eliminación de mascotas
 - **Ejecución**: `cd test-pet && python test_pet.py`
 - **Características**:
   - ✅ Registro completo de nueva mascota
+  - ✅ Eliminación específica de la mascota creada
   - ✅ Validación de información básica y médica
   - ✅ Manejo de formularios complejos
   - ✅ Flujo end-to-end desde autenticación hasta confirmación
@@ -147,10 +149,10 @@ Todos los módulos generan automáticamente reportes PDF profesionales que inclu
 
 ### Test-Auth (4 pruebas):
 
-- Login Usuario: ~15-20 segundos
-- Login Clínica: ~15-20 segundos
-- Registro Usuario: ~20-25 segundos
-- Registro Clínica: ~20-25 segundos
+- Registro Usuario: ~15-20 segundos
+- Registro Clínica: ~15-20 segundos
+- Login y Eliminación Usuario: ~20-25 segundos
+- Login y Eliminación Clínica: ~20-25 segundos
 - **Total**: ~70-90 segundos
 
 ### Test-Donations (2 pruebas):
@@ -166,8 +168,8 @@ Todos los módulos generan automáticamente reportes PDF profesionales que inclu
 
 ### Test-Pet (1 prueba):
 
-- Registro de Mascota: ~45-60 segundos
-- **Total**: ~45-60 segundos
+- Registro y Eliminación de Mascota: ~35-45 segundos
+- **Total**: ~35-45 segundos
 
 ## Instalación de GeckoDriver (Firefox)
 
@@ -187,29 +189,29 @@ Alternativamente, puedes agregar la carpeta donde está geckodriver a tu PATH de
 
 ### 🔐 Test-Auth: Sistema de Autenticación
 
-#### Prueba 1: Login Usuario Dueño
-
-- **Credenciales**: juan@example.com / Password123
-- **Flujo**: Login → Verificar redirección a `/public` → Logout
-- **Objetivo**: Verificar autenticación de dueños de mascotas
-
-#### Prueba 2: Login Clínica Veterinaria
-
-- **Credenciales**: veterinaria@sanpatricio.com / Clinic123
-- **Flujo**: Login → Verificar redirección a `/requests` → Logout
-- **Objetivo**: Verificar autenticación de clínicas veterinarias
-
-#### Prueba 3: Registro de Nuevo Dueño
+#### Prueba 1: Registro de Nuevo Dueño
 
 - **Datos de prueba**: Carlos Rodríguez, carlos.rodriguez@email.com, etc.
 - **Flujo**: Registro → Validación de formulario → Cierre
 - **Objetivo**: Verificar formulario de registro para dueños
 
-#### Prueba 4: Registro de Nueva Clínica
+#### Prueba 2: Registro de Nueva Clínica
 
 - **Datos de prueba**: Veterinaria Los Andes, info@veterinarialosandes.com, etc.
 - **Flujo**: Registro → Validación de formulario → Cierre
 - **Objetivo**: Verificar formulario de registro para clínicas
+
+#### Prueba 3: Login y Eliminación Usuario Dueño
+
+- **Credenciales**: carlos.rodriguez@email.com / Password123
+- **Flujo**: Login → Navegación a perfil → Eliminar cuenta → Logout
+- **Objetivo**: Verificar autenticación y eliminación de cuenta de dueños
+
+#### Prueba 4: Login y Eliminación Clínica
+
+- **Credenciales**: info@veterinarialosandes.com / Clinic123
+- **Flujo**: Login → Navegación a perfil → Eliminar cuenta → Logout
+- **Objetivo**: Verificar autenticación y eliminación de cuenta de clínicas
 
 ### 🩸 Test-Donations: Sistema de Donación
 
@@ -236,12 +238,12 @@ Alternativamente, puedes agregar la carpeta donde está geckodriver a tu PATH de
 
 ### 🐾 Test-Pet: Sistema de Registro de Mascotas
 
-#### Prueba: Registro Completo de Mascota
+#### Prueba: Registro y Eliminación Completa de Mascota
 
-- **Credenciales**: juan@example.com / Password123
-- **Flujo**: Login → Navegación a "Mis Mascotas" → Registrar Nueva Mascota → Completar Formulario
-- **Datos de prueba**: TestPet, Perro, Mestizo, 3 años, 30kg, DEA 1.1+
-- **Objetivo**: Verificar el flujo end-to-end de registro de mascotas para dueños
+- **Credenciales**: mcastiblancoa@unal.edu.co / Mati112999
+- **Flujo**: Login → Navegación a "Mis Mascotas" → Registrar Nueva Mascota → Completar Formulario → Eliminar Mascota Creada
+- **Datos de prueba**: TestPetAuto, Perro, Mestizo, 3 años, 15.5kg, DEA 1.1+
+- **Objetivo**: Verificar el flujo end-to-end completo de registro y eliminación de mascotas
 
 ## 🔧 Características Técnicas
 
@@ -264,19 +266,20 @@ Alternativamente, puedes agregar la carpeta donde está geckodriver a tu PATH de
 2. **Firefox**: Instalación requerida en el sistema
 3. **GeckoDriver**: Necesario en PATH o carpeta del proyecto
 4. **Ventana maximizada**: Navegador se abre en pantalla completa
-5. **Timeouts**: Esperas de hasta 10 segundos para carga dinámica
+5. **Timeouts**: Esperas de hasta 15 segundos para carga dinámica
+
+### Específico para Test-Auth:
+
+- **Navegador independiente**: Cada prueba abre/cierra su navegador
+- **Cuentas temporales**: Se crean y eliminan automáticamente
+- **Formularios**: Validación completa de campos
 
 ### Específico para Test-Donations:
 
 - **Postulaciones duplicadas**: HTTP 409 es comportamiento esperado
 - **Navegador persistente**: Se mantiene entre las 2 pruebas
 - **Selección aleatoria**: Varía según solicitudes disponibles
-
-### Específico para Test-Auth:
-
-- **Navegador independiente**: Cada prueba abre/cierra su navegador
-- **Datos de prueba**: No se guardan permanentemente
-- **Formularios**: Validación completa de campos
+- **Tiempos optimizados**: Esperas de 3 segundos para estabilidad
 
 ### Específico para Test-Requests:
 
@@ -289,6 +292,8 @@ Alternativamente, puedes agregar la carpeta donde está geckodriver a tu PATH de
 - **Login como dueño**: Requiere credenciales de usuario dueño
 - **Formulario extenso**: Información básica y médica completa
 - **Validaciones estrictas**: Todos los campos obligatorios requeridos
+- **Mascota temporal**: Se crea "TestPetAuto" y se elimina automáticamente
+- **Modal de eliminación**: Confirmación requerida para eliminar
 
 ## 🛠️ Solución de Problemas
 
