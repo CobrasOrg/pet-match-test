@@ -43,7 +43,7 @@ class PetMatchPDFGenerator:
         title.alignment = TA_CENTER
         elements.append(title)
         
-        subtitle = Paragraph("Facultad de Ingeniería - Departamento de Sistemas", styles['Heading2'])
+        subtitle = Paragraph("Facultad de Ingeniería - Ingeniería de Sistemas y Computación ", styles['Heading2'])
         subtitle.alignment = TA_CENTER
         elements.append(subtitle)
         
