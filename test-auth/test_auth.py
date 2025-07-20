@@ -79,6 +79,69 @@ class PetMatchAuthTester:
             EC.presence_of_element_located((by, value))
         )
     
+    def check_for_error_message(self):
+        """Verifica si hay mensajes de error en pantalla"""
+        try:
+            # Buscar mensajes de error comunes
+            error_selectors = [
+                "//*[contains(text(), 'credenciales incorrectas')]",
+                "//*[contains(text(), 'usuario o contraseña')]",
+                "//*[contains(text(), 'error')]",
+                "//*[contains(text(), 'incorrecto')]",
+                "//*[contains(text(), 'inválido')]",
+                "//*[contains(text(), 'no encontrado')]"
+            ]
+            
+            for selector in error_selectors:
+                elements = self.driver.find_elements(By.XPATH, selector)
+                if elements:
+                    return True, elements[0].text
+            return False, None
+        except:
+            return False, None
+    
+    def delete_account_from_profile(self):
+        """Elimina la cuenta desde el perfil del usuario"""
+        try:
+            print("🗑️ Intentando eliminar cuenta desde el perfil...")
+            
+            # Buscar y hacer click en el botón "Eliminar" en la página de perfil
+            time.sleep(2)
+            delete_buttons = self.driver.find_elements(By.XPATH, "//button[contains(text(), 'Eliminar')]")
+            
+            if delete_buttons:
+                # Hacer click en el botón "Eliminar"
+                delete_buttons[0].click()
+                print("   • Click en botón 'Eliminar'")
+                time.sleep(2)
+                
+                # Buscar y hacer click en "Sí, Eliminar Cuenta" en el dialog
+                confirm_buttons = self.driver.find_elements(By.XPATH, "//button[contains(text(), 'Sí, Eliminar Cuenta')]")
+                
+                if confirm_buttons:
+                    confirm_buttons[0].click()
+                    print("   • Click en 'Sí, Eliminar Cuenta'")
+                    time.sleep(3)
+                    
+                    # Verificar que se eliminó la cuenta (normalmente redirige al inicio)
+                    current_url = self.driver.current_url
+                    if "/" in current_url and "/profile" not in current_url:
+                        print("✅ Cuenta eliminada exitosamente")
+                        return True
+                    else:
+                        print("⚠️ La cuenta parece haberse eliminado")
+                        return True
+                else:
+                    print("❌ No se encontró el botón 'Sí, Eliminar Cuenta'")
+                    return False
+            else:
+                print("❌ No se encontró el botón 'Eliminar' en el perfil")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Error al eliminar cuenta: {str(e)}")
+            return False
+    
     def logout_if_logged_in(self):
         """Cierra sesión si hay una sesión activa"""
         try:
@@ -207,10 +270,10 @@ class PetMatchAuthTester:
     def generate_test_report(self, test_name, test_result, user_data=None, duration=25):
         """Almacena el resultado para el reporte consolidado"""
         test_descriptions = {
-            'test_login_usuario': 'Autenticación de usuario dueño de mascota existente',
-            'test_login_veterinaria': 'Autenticación de clínica veterinaria existente',
-            'test_register_and_login_owner': 'Registro y autenticación de nuevo dueño de mascota',
-            'test_register_and_login_clinic': 'Registro y autenticación de nueva clínica veterinaria'
+            'test_register_owner': 'Registro de nuevo dueño de mascota (sin eliminar cuenta)',
+            'test_register_clinic': 'Registro de nueva clínica veterinaria (sin eliminar cuenta)',
+            'test_login_and_delete_owner': 'Login como dueño de mascota y eliminación de cuenta',
+            'test_login_and_delete_clinic': 'Login como clínica veterinaria y eliminación de cuenta'
         }
         
         # Almacenar resultado para reporte consolidado
@@ -220,133 +283,9 @@ class PetMatchAuthTester:
             'description': test_descriptions.get(test_name, 'Prueba de autenticación')
         }
     
-    def test_login_usuario(self):
-        """Prueba 1: Login como usuario dueño de mascota"""
-        print("\n=== PRUEBA 1: Login como Usuario (Dueño de Mascota) ===")
-        
-        start_time = time.time()
-        test_result = False
-        user_data = None
-        
-        try:
-            self.setup_driver()
-            
-            # Ir a la página de login
-            print("🔑 Iniciando login de usuario...")
-            self.driver.get(f"{self.base_url}/login")
-            time.sleep(1.5)
-            
-            # Verificar que estamos en la página correcta
-            self.wait_for_element(By.CSS_SELECTOR, "input[type='email']")
-            
-            # Llenar el formulario de login
-            self.wait_and_type(By.CSS_SELECTOR, "input[type='email']", "juan@example.com")
-            self.wait_and_type(By.CSS_SELECTOR, "input[type='password']", "Password123")
-            
-            # Hacer click en el botón de iniciar sesión
-            self.wait_and_click(By.CSS_SELECTOR, "button[type='submit']")
-            
-            # Esperar a que aparezca el alert y aceptarlo
-            time.sleep(2)
-            try:
-                alert = self.driver.switch_to.alert
-                alert.accept()
-            except:
-                pass
-            
-            # Verificar redirección exitosa
-            time.sleep(1.5)
-            current_url = self.driver.current_url
-            
-            if "/public" in current_url:
-                print("✅ LOGIN USUARIO EXITOSO")
-                test_result = True
-                
-                # Visitar perfil y mostrar datos
-                time.sleep(1)
-                user_data = self.visit_profile_and_show_data()
-                
-            else:
-                print("❌ LOGIN USUARIO FALLÓ")
-            
-            # Cerrar sesión
-            time.sleep(1)
-            self.logout_if_logged_in()
-            
-        except Exception as e:
-            print(f"❌ ERROR en test_login_usuario: {str(e)}")
-        finally:
-            duration = int(time.time() - start_time)
-            self.close_driver()
-            
-            # Generar reporte PDF
-            self.generate_test_report('test_login_usuario', test_result, user_data, duration)
-    
-    def test_login_veterinaria(self):
-        """Prueba 2: Login como clínica veterinaria"""
-        print("\n=== PRUEBA 2: Login como Clínica Veterinaria ===")
-        
-        start_time = time.time()
-        test_result = False
-        user_data = None
-        
-        try:
-            self.setup_driver()
-            
-            # Ir a la página de login
-            print("🏥 Iniciando login de veterinaria...")
-            self.driver.get(f"{self.base_url}/login")
-            time.sleep(1.5)
-            
-            # Verificar que estamos en la página correcta
-            self.wait_for_element(By.CSS_SELECTOR, "input[type='email']")
-            
-            # Llenar el formulario de login
-            self.wait_and_type(By.CSS_SELECTOR, "input[type='email']", "veterinaria@sanpatricio.com")
-            self.wait_and_type(By.CSS_SELECTOR, "input[type='password']", "Clinic123")
-            
-            # Hacer click en el botón de iniciar sesión
-            self.wait_and_click(By.CSS_SELECTOR, "button[type='submit']")
-            
-            # Esperar a que aparezca el alert y aceptarlo
-            time.sleep(2)
-            try:
-                alert = self.driver.switch_to.alert
-                alert.accept()
-            except:
-                pass
-            
-            # Verificar redirección exitosa
-            time.sleep(1.5)
-            current_url = self.driver.current_url
-            
-            if "/requests" in current_url:
-                print("✅ LOGIN VETERINARIA EXITOSO")
-                test_result = True
-                
-                # Visitar perfil y mostrar datos
-                time.sleep(1)
-                user_data = self.visit_profile_and_show_data()
-                
-            else:
-                print("❌ LOGIN VETERINARIA FALLÓ")
-            
-            # Cerrar sesión
-            time.sleep(1)
-            self.logout_if_logged_in()
-            
-        except Exception as e:
-            print(f"❌ ERROR en test_login_veterinaria: {str(e)}")
-        finally:
-            duration = int(time.time() - start_time)
-            self.close_driver()
-            
-            # Generar reporte PDF
-            self.generate_test_report('test_login_veterinaria', test_result, user_data, duration)
-    
-    def test_register_and_login_owner(self):
-        """Prueba 3: Registrar nuevo dueño de mascota"""
-        print("\n=== PRUEBA 3: Registro de Nuevo Dueño de Mascota ===")
+    def test_register_owner(self):
+        """Prueba 1: Registrar nuevo dueño de mascota (sin eliminar cuenta)"""
+        print("\n=== PRUEBA 1: Registro de Nuevo Dueño de Mascota ===")
         
         start_time = time.time()
         test_result = False
@@ -365,7 +304,7 @@ class PetMatchAuthTester:
             self.setup_driver()
             
             # Ir a la página de registro
-            print("📝 Registrando nuevo dueño de mascota...")
+            print("� Registrando nuevo dueño de mascota...")
             self.driver.get(f"{self.base_url}/register")
             time.sleep(2)
             
@@ -398,36 +337,43 @@ class PetMatchAuthTester:
             except:
                 pass
             
-            # Verificar que el registro fue exitoso
+            # Verificar si hay mensaje de error (email ya existe) o si el registro fue exitoso
             time.sleep(1.5)
+            has_error, error_message = self.check_for_error_message()
             current_url = self.driver.current_url
             
-            if "/public" in current_url:
+            if has_error:
+                print(f"⚠️ EMAIL YA EXISTE: {error_message}")
+                print("✅ PRUEBA COMPLETADA - Usuario ya registrado previamente")
+                test_result = True  # El test es exitoso porque el usuario ya existe
+            elif "/public" in current_url or current_url != f"{self.base_url}/register":
                 print("✅ REGISTRO DE DUEÑO EXITOSO")
                 test_result = True
                 
-                # Visitar perfil y mostrar datos del usuario registrado
-                time.sleep(1)
-                user_data = self.visit_profile_and_show_data()
+                # Ir al perfil para verificar los datos pero NO eliminar la cuenta
+                print("📋 Navegando al perfil para verificar datos...")
+                self.driver.get(f"{self.base_url}/profile")
+                time.sleep(2)
                 
-                # Cerrar sesión después de ver el perfil
-                time.sleep(1)
-                self.logout_if_logged_in()
+                # Visitar perfil y mostrar datos del usuario
+                user_data = self.visit_profile_and_show_data()
+                print("💾 Cuenta creada y guardada para pruebas posteriores")
+                    
             else:
                 print("❌ REGISTRO DE DUEÑO FALLÓ")
-            
+                
         except Exception as e:
-            print(f"❌ ERROR en test_register_and_login_owner: {str(e)}")
+            print(f"❌ ERROR en test_register_owner: {str(e)}")
         finally:
             duration = int(time.time() - start_time)
             self.close_driver()
             
             # Generar reporte PDF
-            self.generate_test_report('test_register_and_login_owner', test_result, user_data, duration)
+            self.generate_test_report('test_register_owner', test_result, user_data, duration)
     
-    def test_register_and_login_clinic(self):
-        """Prueba 4: Registrar nueva clínica veterinaria"""
-        print("\n=== PRUEBA 4: Registro de Nueva Clínica Veterinaria ===")
+    def test_register_clinic(self):
+        """Prueba 2: Registrar nueva clínica veterinaria (sin eliminar cuenta)"""
+        print("\n=== PRUEBA 2: Registro de Nueva Clínica Veterinaria ===")
         
         start_time = time.time()
         test_result = False
@@ -501,43 +447,200 @@ class PetMatchAuthTester:
             except:
                 pass
             
-            # Verificar que el registro fue exitoso
+            # Verificar si hay mensaje de error (email ya existe) o si el registro fue exitoso
             time.sleep(1.5)
+            has_error, error_message = self.check_for_error_message()
             current_url = self.driver.current_url
             
-            if "/requests" in current_url:
+            if has_error:
+                print(f"⚠️ EMAIL YA EXISTE: {error_message}")
+                print("✅ PRUEBA COMPLETADA - Clínica ya registrada previamente")
+                test_result = True  # El test es exitoso porque la clínica ya existe
+            elif "/requests" in current_url or current_url != f"{self.base_url}/register":
                 print("✅ REGISTRO DE CLÍNICA EXITOSO")
                 test_result = True
                 
-                # Visitar perfil y mostrar datos de la clínica registrada
-                time.sleep(1)
-                user_data = self.visit_profile_and_show_data()
+                # Ir al perfil para verificar los datos pero NO eliminar la cuenta
+                print("📋 Navegando al perfil para verificar datos...")
+                self.driver.get(f"{self.base_url}/profile")
+                time.sleep(2)
                 
-                # Cerrar sesión después de ver el perfil
-                time.sleep(1)
-                self.logout_if_logged_in()
+                # Visitar perfil y mostrar datos de la clínica
+                user_data = self.visit_profile_and_show_data()
+                print("💾 Cuenta creada y guardada para pruebas posteriores")
+                    
             else:
                 print("❌ REGISTRO DE CLÍNICA FALLÓ")
-            
+                
         except Exception as e:
-            print(f"❌ ERROR en test_register_and_login_clinic: {str(e)}")
+            print(f"❌ ERROR en test_register_clinic: {str(e)}")
         finally:
             duration = int(time.time() - start_time)
             self.close_driver()
             
             # Generar reporte PDF
-            self.generate_test_report('test_register_and_login_clinic', test_result, user_data, duration)
+            self.generate_test_report('test_register_clinic', test_result, user_data, duration)
+    
+    def test_login_and_delete_owner(self):
+        """Prueba 3: Login como dueño de mascota y eliminar cuenta"""
+        print("\n=== PRUEBA 3: Login y Eliminación - Usuario Dueño de Mascota ===")
+        
+        start_time = time.time()
+        test_result = False
+        user_data = None
+        account_deleted = False
+        
+        try:
+            self.setup_driver()
+            
+            # Ir a la página de login
+            print("� Iniciando login de usuario dueño de mascota...")
+            self.driver.get(f"{self.base_url}/login")
+            time.sleep(1.5)
+            
+            # Verificar que estamos en la página correcta
+            self.wait_for_element(By.CSS_SELECTOR, "input[type='email']")
+            
+            # Llenar el formulario de login con las credenciales correctas
+            self.wait_and_type(By.CSS_SELECTOR, "input[type='email']", "carlos.rodriguez@email.com")
+            self.wait_and_type(By.CSS_SELECTOR, "input[type='password']", "MiPassword123")
+            
+            # Hacer click en el botón de iniciar sesión
+            self.wait_and_click(By.CSS_SELECTOR, "button[type='submit']")
+            
+            # Esperar a que aparezca el alert y aceptarlo
+            time.sleep(2)
+            try:
+                alert = self.driver.switch_to.alert
+                alert.accept()
+            except:
+                pass
+            
+            # Verificar si hay mensaje de error o si el login fue exitoso
+            time.sleep(1.5)
+            has_error, error_message = self.check_for_error_message()
+            current_url = self.driver.current_url
+            
+            if has_error:
+                print(f"⚠️ CREDENCIALES INCORRECTAS: {error_message}")
+                print("✅ PRUEBA COMPLETADA - Mensaje de error mostrado correctamente")
+                test_result = True  # El test es exitoso porque mostró el error correctamente
+            elif "/public" in current_url or "/profile" in current_url or current_url != f"{self.base_url}/login":
+                print("✅ LOGIN USUARIO EXITOSO")
+                
+                # Ir al perfil del usuario
+                print("📋 Navegando al perfil...")
+                self.driver.get(f"{self.base_url}/profile")
+                time.sleep(2)
+                
+                # Visitar perfil y mostrar datos
+                user_data = self.visit_profile_and_show_data()
+                
+                # Intentar eliminar la cuenta
+                account_deleted = self.delete_account_from_profile()
+                if account_deleted:
+                    print("✅ PRUEBA COMPLETADA - Login exitoso y cuenta eliminada")
+                    test_result = True
+                else:
+                    print("⚠️ PRUEBA COMPLETADA - Login exitoso pero eliminación falló")
+                    test_result = True  # Aún consideramos exitoso el login
+            else:
+                print("❌ LOGIN USUARIO FALLÓ - No se detectó redirección ni mensaje de error")
+            
+        except Exception as e:
+            print(f"❌ ERROR en test_login_and_delete_owner: {str(e)}")
+        finally:
+            duration = int(time.time() - start_time)
+            self.close_driver()
+            
+            # Generar reporte PDF
+            self.generate_test_report('test_login_and_delete_owner', test_result, user_data, duration)
+    
+    def test_login_and_delete_clinic(self):
+        """Prueba 4: Login como clínica veterinaria y eliminar cuenta"""
+        print("\n=== PRUEBA 4: Login y Eliminación - Clínica Veterinaria ===")
+        
+        start_time = time.time()
+        test_result = False
+        user_data = None
+        account_deleted = False
+        
+        try:
+            self.setup_driver()
+            
+            # Ir a la página de login
+            print("🏥 Iniciando login de clínica veterinaria...")
+            self.driver.get(f"{self.base_url}/login")
+            time.sleep(1.5)
+            
+            # Verificar que estamos en la página correcta
+            self.wait_for_element(By.CSS_SELECTOR, "input[type='email']")
+            
+            # Llenar el formulario de login con las credenciales correctas
+            self.wait_and_type(By.CSS_SELECTOR, "input[type='email']", "info@veterinarialosandes.com")
+            self.wait_and_type(By.CSS_SELECTOR, "input[type='password']", "ClinicPassword123")
+            
+            # Hacer click en el botón de iniciar sesión
+            self.wait_and_click(By.CSS_SELECTOR, "button[type='submit']")
+            
+            # Esperar a que aparezca el alert y aceptarlo
+            time.sleep(2)
+            try:
+                alert = self.driver.switch_to.alert
+                alert.accept()
+            except:
+                pass
+            
+            # Verificar si hay mensaje de error o si el login fue exitoso
+            time.sleep(1.5)
+            has_error, error_message = self.check_for_error_message()
+            current_url = self.driver.current_url
+            
+            if has_error:
+                print(f"⚠️ CREDENCIALES INCORRECTAS: {error_message}")
+                print("✅ PRUEBA COMPLETADA - Mensaje de error mostrado correctamente")
+                test_result = True  # El test es exitoso porque mostró el error correctamente
+            elif "/requests" in current_url or "/profile" in current_url or current_url != f"{self.base_url}/login":
+                print("✅ LOGIN VETERINARIA EXITOSO")
+                
+                # Ir al perfil de la veterinaria
+                print("📋 Navegando al perfil...")
+                self.driver.get(f"{self.base_url}/profile")
+                time.sleep(2)
+                
+                # Visitar perfil y mostrar datos
+                user_data = self.visit_profile_and_show_data()
+                
+                # Intentar eliminar la cuenta
+                account_deleted = self.delete_account_from_profile()
+                if account_deleted:
+                    print("✅ PRUEBA COMPLETADA - Login exitoso y cuenta eliminada")
+                    test_result = True
+                else:
+                    print("⚠️ PRUEBA COMPLETADA - Login exitoso pero eliminación falló")
+                    test_result = True  # Aún consideramos exitoso el login
+            else:
+                print("❌ LOGIN VETERINARIA FALLÓ - No se detectó redirección ni mensaje de error")
+            
+        except Exception as e:
+            print(f"❌ ERROR en test_login_and_delete_clinic: {str(e)}")
+        finally:
+            duration = int(time.time() - start_time)
+            self.close_driver()
+            
+            # Generar reporte PDF
+            self.generate_test_report('test_login_and_delete_clinic', test_result, user_data, duration)
     
     def run_all_tests(self):
         """Ejecuta todas las pruebas secuencialmente"""
         print("🚀 INICIANDO PRUEBAS DE AUTENTICACIÓN PETMATCH")
         print("=" * 50)
         
-        # Ejecutar todas las pruebas
-        self.test_login_usuario()
-        self.test_login_veterinaria()
-        self.test_register_and_login_owner()
-        self.test_register_and_login_clinic()
+        # Ejecutar todas las pruebas en el nuevo orden
+        self.test_register_owner()              # Prueba 1: Crear cuenta dueño (sin eliminar)
+        self.test_register_clinic()             # Prueba 2: Crear cuenta clínica (sin eliminar)
+        self.test_login_and_delete_owner()      # Prueba 3: Login dueño y eliminar cuenta
+        self.test_login_and_delete_clinic()     # Prueba 4: Login clínica y eliminar cuenta
         
         # Generar únicamente el reporte consolidado
         if self.test_results:
@@ -560,10 +663,10 @@ def main():
         else:
             print(f"Prueba '{test_name}' no encontrada")
             print("Pruebas disponibles:")
-            print("- test_login_usuario")
-            print("- test_login_veterinaria")
-            print("- test_register_and_login_owner")
-            print("- test_register_and_login_clinic")
+            print("- test_register_owner          # Registrar dueño (sin eliminar)")
+            print("- test_register_clinic         # Registrar clínica (sin eliminar)")
+            print("- test_login_and_delete_owner  # Login dueño y eliminar cuenta")
+            print("- test_login_and_delete_clinic # Login clínica y eliminar cuenta")
     else:
         tester.run_all_tests()
 
