@@ -67,15 +67,15 @@ Cada ejecución genera automáticamente un reporte PDF profesional que incluye:
 
 ## � Descripción de la Prueba
 
-### 🐾 Test-Pet: Registro Completo de Mascota
+### 🐾 Test-Pet: Registro y Eliminación Completa de Mascota
 
-**Objetivo**: Verificar el flujo end-to-end de registro de una nueva mascota en el sistema.
+**Objetivo**: Verificar el flujo end-to-end de registro y eliminación de una nueva mascota en el sistema.
 
 #### Flujo de Prueba Detallado:
 
 1. **🔑 Autenticación**
 
-   - Login con credenciales: `juan@example.com` / `Password123`
+   - Login con credenciales: `mcastiblancoa@unal.edu.co` / `Mati112999`
    - Verificación de login exitoso
    - Manejo de alertas JavaScript
 
@@ -93,22 +93,30 @@ Cada ejecución genera automáticamente un reporte PDF profesional que incluye:
 
 4. **📋 Información Básica**
 
-   - **Nombre**: TestPet
+   - **Nombre**: TestPetAuto
    - **Especie**: Perro (canine)
-   - **Raza**: Mestizo
+   - **Raza**: Mestizo (selección automática)
    - **Edad**: 3 años
-   - **Peso**: 30 kg
+   - **Peso**: 15.5 kg
 
 5. **🏥 Información Médica**
 
-   - **Tipo de sangre**: DEA 1.1+
-   - **Última vacunación**: 01/07/2025
-   - **Estado de salud**: Descripción detallada completa
+   - **Tipo de sangre**: DEA 1.1+ (selección automática)
+   - **Última vacunación**: Fecha válida (6 meses atrás)
+   - **Estado de salud**: Descripción detallada de 405 caracteres
 
 6. **✅ Envío y Confirmación**
+
    - Envío del formulario completo
    - Manejo de respuesta del sistema
    - Aceptación de alert de confirmación
+
+7. **🗑️ Eliminación de Mascota**
+   - Navegación a página "Mis Mascotas"
+   - Búsqueda específica de la mascota "TestPetAuto"
+   - Click en botón "Eliminar"
+   - Confirmación en modal "¿Eliminar mascota?"
+   - Eliminación exitosa de la mascota creada
 
 #### Validaciones Incluidas:
 
@@ -117,13 +125,17 @@ Cada ejecución genera automáticamente un reporte PDF profesional que incluye:
 - ✅ Selección válida en dropdowns
 - ✅ Texto suficiente en descripción de salud
 - ✅ Fecha de vacunación dentro del rango válido
+- ✅ Registro exitoso de la mascota
+- ✅ Eliminación específica de la mascota creada
+- ✅ Confirmación en modal de eliminación
 
 ## ⏱️ Tiempos de Ejecución
 
-- **Prueba completa**: ~45-60 segundos
-- **Login y navegación**: ~10-15 segundos
-- **Completar formulario**: ~20-25 segundos
-- **Envío y confirmación**: ~5-10 segundos
+- **Prueba completa**: ~35-45 segundos
+- **Login y navegación**: ~8-10 segundos
+- **Completar formulario**: ~12-15 segundos
+- **Envío y confirmación**: ~3-5 segundos
+- **Eliminación de mascota**: ~5-8 segundos
 - **Generación de PDF**: ~2-3 segundos
 
 ## 🔧 Características Técnicas
@@ -135,25 +147,27 @@ Cada ejecución genera automáticamente un reporte PDF profesional que incluye:
 - **Logging detallado**: Progreso paso a paso visible
 - **Manejo de alertas**: JavaScript alerts automáticos
 - **Limpieza automática**: Cierre de navegador y cleanup
+- **Eliminación inteligente**: Búsqueda específica por nombre de mascota
+- **Tiempos optimizados**: Esperas reducidas para mayor eficiencia
 
 ## 🎨 Datos de Prueba Utilizados
 
 ### Usuario de Prueba:
 
-- **Email**: juan@example.com
-- **Password**: Password123
+- **Email**: mcastiblancoa@unal.edu.co
+- **Password**: Mati112999
 - **Tipo**: Dueño de mascota
 
 ### Mascota de Prueba:
 
-- **Nombre**: TestPet
+- **Nombre**: TestPetAuto
 - **Especie**: Perro
 - **Raza**: Mestizo
 - **Edad**: 3 años
-- **Peso**: 30 kg
+- **Peso**: 15.5 kg
 - **Tipo de sangre**: DEA 1.1+
-- **Última vacunación**: 01/07/2025
-- **Estado de salud**: "Mascota en excelente estado de salud, sin enfermedades conocidas, vacunas al día"
+- **Última vacunación**: Fecha válida (6 meses atrás)
+- **Estado de salud**: "Mascota en excelente estado de salud general. Sin enfermedades conocidas..."
 
 ## 🚨 Notas Importantes
 
@@ -161,9 +175,10 @@ Cada ejecución genera automáticamente un reporte PDF profesional que incluye:
 2. **Firefox**: Instalación requerida en el sistema
 3. **GeckoDriver**: Necesario en PATH o carpeta del proyecto
 4. **Ventana maximizada**: Navegador se abre en pantalla completa
-5. **Timeouts**: Esperas de hasta 10 segundos para carga dinámica
-6. **Datos de prueba**: No se guardan permanentemente en la base de datos
+5. **Timeouts**: Esperas de hasta 15 segundos para carga dinámica
+6. **Mascota temporal**: Se crea y elimina automáticamente "TestPetAuto"
 7. **Formulario**: Validación completa de todos los campos obligatorios
+8. **Modal de eliminación**: Confirmación requerida para eliminar mascota
 
 ## 🛠️ Solución de Problemas
 
@@ -184,7 +199,7 @@ Cada ejecución genera automáticamente un reporte PDF profesional que incluye:
 
 ### Error: "Login failed"
 
-- Verifica que las credenciales `juan@example.com / Password123` sean válidas
+- Verifica que las credenciales `mcastiblancoa@unal.edu.co / Mati112999` sean válidas
 - Comprueba que el usuario esté registrado en el sistema
 
 ### Error: "Button not clickable"
@@ -193,6 +208,12 @@ Cada ejecución genera automáticamente un reporte PDF profesional que incluye:
 - Comprueba que no haya overlays bloqueando el elemento
 - El navegador debe estar maximizado
 
+### Error: "Mascota no encontrada para eliminar"
+
+- Verifica que la mascota "TestPetAuto" se haya registrado correctamente
+- Comprueba que estés en la página `localhost:5173/my-pets`
+- Asegúrate de que el modal de eliminación aparezca correctamente
+
 ### PDF no se genera
 
 - Verifica permisos de escritura en la carpeta `reports/`
@@ -200,8 +221,8 @@ Cada ejecución genera automáticamente un reporte PDF profesional que incluye:
 
 ## 📈 Métricas de Calidad
 
-- **Cobertura**: Flujo completo end-to-end
+- **Cobertura**: Flujo completo end-to-end con eliminación
 - **Robustez**: Manejo de errores y timeouts
 - **Documentación**: Reporte PDF detallado
 - **Mantenibilidad**: Código modular y comentado
-- **Eficiencia**: Prueba única y completa
+- **Eficiencia**: Prueba optimizada y completa

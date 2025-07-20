@@ -29,7 +29,7 @@ class PetMatchDonationPDFGenerator:
         """Crea el encabezado del documento con logo y título"""
         # Logo de la Universidad - tamaño aumentado horizontalmente
         if self.logo_path and os.path.exists(self.logo_path):
-            logo = Image(self.logo_path, width=2.5*inch, height=1.8*inch)
+            logo = Image(self.logo_path, width=3.5*inch, height=1.8*inch)
             logo.hAlign = 'CENTER'
             elements.append(logo)
         else:
@@ -43,7 +43,7 @@ class PetMatchDonationPDFGenerator:
         title.alignment = TA_CENTER
         elements.append(title)
         
-        subtitle = Paragraph("Facultad de Ingeniería - Departamento de Sistemas", styles['Heading2'])
+        subtitle = Paragraph("Facultad de Ingeniería - Ingeniería de Sistemas y Computación ", styles['Heading2'])
         subtitle.alignment = TA_CENTER
         elements.append(subtitle)
         
@@ -296,7 +296,7 @@ class PetMatchDonationPDFGenerator:
         <b>Universidad Nacional de Colombia</b><br/>
         Facultad de Ingeniería - Departamento de Sistemas<br/>
         <b>Materia:</b> Ingeniería de Software 2 | <b>Grupo:</b> Cobras | <b>Proyecto:</b> Pet-Match<br/>
-        Sistema de Pruebas Automatizadas - Módulo de Donaciones<br/>
+        Sistema de Pruebas Automatizadas<br/>
         Generado automáticamente el """ + datetime.now().strftime("%d de %B de %Y a las %H:%M") + """
         </para>
         """

@@ -27,7 +27,7 @@ class PetMatchRequestsPDFGenerator:
         
     def create_header(self, elements, styles):
         """Crea el encabezado del documento con logo y título"""
-        # Logo de la Universidad - tamaño aumentado horizontalmente
+        # Logo de la Universidad
         if self.logo_path and os.path.exists(self.logo_path):
             logo = Image(self.logo_path, width=3.5*inch, height=1.8*inch)
             logo.hAlign = 'CENTER'
@@ -43,7 +43,7 @@ class PetMatchRequestsPDFGenerator:
         title.alignment = TA_CENTER
         elements.append(title)
         
-        subtitle = Paragraph("Facultad de Ingeniería - Departamento de Sistemas", styles['Heading2'])
+        subtitle = Paragraph("Facultad de Ingeniería - Departamento de Sistemas e Industrial", styles['Heading2'])
         subtitle.alignment = TA_CENTER
         elements.append(subtitle)
         
@@ -153,6 +153,7 @@ class PetMatchRequestsPDFGenerator:
             ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
             ('FONTSIZE', (0, 0), (-1, -1), 11),
             ('GRID', (0, 0), (-1, -1), 1, colors.black),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
         ]))
         
         elements.append(summary_table)
@@ -265,7 +266,7 @@ class PetMatchRequestsPDFGenerator:
         
         flow_steps = [
             ["Paso", "Acción", "Descripción"],
-            ["1", "Login", "Autenticación con veterinaria@sanpatricio.com"],
+            ["1", "Login", "Autenticación con castiblancoavendaom@gmail.com"],
             ["2", "Navegación", "Acceso a la página /requests"],
             ["3", "Filtrado", "Selección de solicitudes activas"],
             ["4", "Gestión", "Click en botón 'Gestionar' de primera solicitud"],
